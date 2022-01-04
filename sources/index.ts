@@ -7,7 +7,7 @@ const azureDevOpsId = '499b84ac-1321-427f-aa17-267ca6975798'
 
 function run(cmd) {
     return new Promise((resolve, reject) => {
-        const task = spawn(cmd, { shell: true })
+        const task = spawn(cmd, { shell: true, timeout: 3 * 60 * 1000 })
         let result = '';
         task.stdout.on('data', (data) => {
             result += data;
@@ -70,13 +70,6 @@ const plugin: Plugin<Hooks & NpmHooks> = {
         }
     } as any,
     hooks: {
-        registerPackageExtensions() {
-            if (process.env.SYSTEM_ACCESSTOKEN) {
-                return Promise.resolve()
-            }
-            // This checks to see if the user is logged in before installs even start
-            return run('az account list').then(() => { });
-        },
         getNpmAuthenticationHeader(
             currentHeader: string | undefined,
             registry: string, { configuration, ident, }: {
