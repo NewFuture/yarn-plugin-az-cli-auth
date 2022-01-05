@@ -1,7 +1,7 @@
-import { Configuration, Ident, Plugin, SettingsType, Hooks } from "@yarnpkg/core";
-import type { Hooks as NpmHooks } from "@yarnpkg/plugin-npm";
 import { spawn } from "child_process";
-import { DateTime } from "luxon";
+import { SettingsType, Configuration } from "@yarnpkg/core";
+import type { Ident, Plugin, Hooks } from "@yarnpkg/core";
+import type { Hooks as NpmHooks } from "@yarnpkg/plugin-npm";
 
 const azureDevOpsId = "499b84ac-1321-427f-aa17-267ca6975798";
 
@@ -94,16 +94,15 @@ const plugin: Plugin<Hooks & NpmHooks> = {
                           }
                         | undefined;
                 };
-                const expiresOn =
-                    azCliTokenCache[registry]?.expiresOn && DateTime.fromISO(azCliTokenCache[registry].expiresOn);
-                if ((expiresOn?.diffNow("seconds").seconds ?? 0) > 0) {
+                const expiresOn = new Date(azCliTokenCache[registry]?.expiresOn);
+                if (+expiresOn - Date.now() > 1000) {
                     return Promise.resolve(`Bearer ${azCliTokenCache[registry].token}`);
                 }
                 const getAccessToken = () =>
                     run(`az account get-access-token --resource \"${azureDevOpsId}\"`).then((result: string) => {
                         const parsed = JSON.parse(result) as { accessToken: string; expiresOn: string };
                         azCliTokenCache[registry] = {
-                            expiresOn: DateTime.fromSQL(parsed.expiresOn).toISO(),
+                            expiresOn: new Date(parsed.expiresOn).toISOString(),
                             token: parsed.accessToken,
                         };
                         return Configuration.updateHomeConfiguration({
