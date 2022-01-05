@@ -35,11 +35,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         [null, {
           "packageLocation": "./",
           "packageDependencies": [
-            ["@types/node", "npm:14.17.5"],
+            ["@types/command-exists", "npm:1.2.0"],
+            ["@types/node", "npm:14.18.5"],
             ["@yarnpkg/builder", "virtual:e662db1916798ad228947a79f2f84c351706a7cc824c4613a645454a0fcb291272088ca706f447e1b2166b1d10d3df4119dbc830448be0cacee8d42d9835fc5c#npm:3.0.0-rc.12"],
             ["@yarnpkg/cli", "virtual:e662db1916798ad228947a79f2f84c351706a7cc824c4613a645454a0fcb291272088ca706f447e1b2166b1d10d3df4119dbc830448be0cacee8d42d9835fc5c#npm:3.0.0-rc.12"],
             ["@yarnpkg/core", "npm:3.0.0-rc.12"],
             ["@yarnpkg/plugin-npm", "virtual:e662db1916798ad228947a79f2f84c351706a7cc824c4613a645454a0fcb291272088ca706f447e1b2166b1d10d3df4119dbc830448be0cacee8d42d9835fc5c#npm:2.5.0-rc.12"],
+            ["command-exists", "npm:1.2.9"],
             ["luxon", "npm:2.0.1"],
             ["prettier", "npm:2.3.2"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"]
@@ -427,6 +429,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD",
         }]
       ]],
+      ["@types/command-exists", [
+        ["npm:1.2.0", {
+          "packageLocation": "./.yarn/cache/@types-command-exists-npm-1.2.0-9c4b80a9f8-7c5a626c38.zip/node_modules/@types/command-exists/",
+          "packageDependencies": [
+            ["@types/command-exists", "npm:1.2.0"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
       ["@types/emscripten", [
         ["npm:1.39.5", {
           "packageLocation": "./.yarn/cache/@types-emscripten-npm-1.39.5-ef4c55ba8e-cb92a99148.zip/node_modules/@types/emscripten/",
@@ -512,10 +523,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],
           "linkType": "HARD",
         }],
-        ["npm:14.17.5", {
-          "packageLocation": "./.yarn/cache/@types-node-npm-14.17.5-7c88786ff6-8fba22a8df.zip/node_modules/@types/node/",
+        ["npm:14.18.5", {
+          "packageLocation": "./.yarn/cache/@types-node-npm-14.18.5-b34dd2c452-5ad7090e4c.zip/node_modules/@types/node/",
           "packageDependencies": [
-            ["@types/node", "npm:14.17.5"]
+            ["@types/node", "npm:14.18.5"]
           ],
           "linkType": "HARD",
         }],
@@ -2007,6 +2018,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/colorette-npm-1.2.2-da75bd0b32-69fec14dda.zip/node_modules/colorette/",
           "packageDependencies": [
             ["colorette", "npm:1.2.2"]
+          ],
+          "linkType": "HARD",
+        }]
+      ]],
+      ["command-exists", [
+        ["npm:1.2.9", {
+          "packageLocation": "./.yarn/cache/command-exists-npm-1.2.9-cc51a1f78a-729ae3d88a.zip/node_modules/command-exists/",
+          "packageDependencies": [
+            ["command-exists", "npm:1.2.9"]
           ],
           "linkType": "HARD",
         }]
@@ -4660,11 +4680,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./",
           "packageDependencies": [
             ["yarn-plugin-az-cli-auth", "workspace:."],
-            ["@types/node", "npm:14.17.5"],
+            ["@types/command-exists", "npm:1.2.0"],
+            ["@types/node", "npm:14.18.5"],
             ["@yarnpkg/builder", "virtual:e662db1916798ad228947a79f2f84c351706a7cc824c4613a645454a0fcb291272088ca706f447e1b2166b1d10d3df4119dbc830448be0cacee8d42d9835fc5c#npm:3.0.0-rc.12"],
             ["@yarnpkg/cli", "virtual:e662db1916798ad228947a79f2f84c351706a7cc824c4613a645454a0fcb291272088ca706f447e1b2166b1d10d3df4119dbc830448be0cacee8d42d9835fc5c#npm:3.0.0-rc.12"],
             ["@yarnpkg/core", "npm:3.0.0-rc.12"],
             ["@yarnpkg/plugin-npm", "virtual:e662db1916798ad228947a79f2f84c351706a7cc824c4613a645454a0fcb291272088ca706f447e1b2166b1d10d3df4119dbc830448be0cacee8d42d9835fc5c#npm:2.5.0-rc.12"],
+            ["command-exists", "npm:1.2.9"],
             ["luxon", "npm:2.0.1"],
             ["prettier", "npm:2.3.2"],
             ["typescript", "patch:typescript@npm%3A4.3.5#~builtin<compat/typescript>::version=4.3.5&hash=d8b4e7"]

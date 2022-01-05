@@ -337,6 +337,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/command-exists@npm:^1":
+  version: 1.2.0
+  resolution: "@types/command-exists@npm:1.2.0"
+  checksum: 7c5a626c38898d0267375dbf24ea374e6fcc8a85837f38eeb4485a5699a905eda89941059ea4f82ffc92b2207b29bdd7f7ab8dcbae95ed661b65cafe958e3fb1
+  languageName: node
+  linkType: hard
+
 "@types/emscripten@npm:^1.38.0":
   version: 1.39.5
   resolution: "@types/emscripten@npm:1.39.5"
@@ -415,10 +422,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.0.0":
-  version: 14.17.5
-  resolution: "@types/node@npm:14.17.5"
-  checksum: 8fba22a8df7bcea75039f08e00fcff8e331f6d367739a9631d3457bc3e8e5ddfdd60e1a5d685d9420312e9ed7cf2f2146d37224ec9f7d578fe8dd32ce3821e62
+"@types/node@npm:^14.18.4":
+  version: 14.18.5
+  resolution: "@types/node@npm:14.18.5"
+  checksum: 5ad7090e4cd1d7cd9efa4915cc8b4f69503a1d2070b1998a55fce776ae03fef6c0703d6940197af2cd31b3516b41b552d9fced92d2a0837c28b8ed8b5ca0872c
   languageName: node
   linkType: hard
 
@@ -1491,6 +1498,13 @@ __metadata:
   version: 1.2.2
   resolution: "colorette@npm:1.2.2"
   checksum: 69fec14ddaedd0f5b00e4bae40dc4bc61f7050ebdc82983a595d6fd64e650b9dc3c033fff378775683138e992e0ddd8717ac7c7cec4d089679dcfbe3cd921b04
+  languageName: node
+  linkType: hard
+
+"command-exists@npm:^1.2.9":
+  version: 1.2.9
+  resolution: "command-exists@npm:1.2.9"
+  checksum: 729ae3d88a2058c93c58840f30341b7f82688a573019535d198b57a4d8cb0135ced0ad7f52b591e5b28a90feb2c675080ce916e56254a0f7c15cb2395277cac3
   languageName: node
   linkType: hard
 
@@ -3767,11 +3781,13 @@ typescript@^4.3.5:
   version: 0.0.0-use.local
   resolution: "yarn-plugin-az-cli-auth@workspace:."
   dependencies:
-    "@types/node": ^14.0.0
+    "@types/command-exists": ^1
+    "@types/node": ^14.18.4
     "@yarnpkg/builder": ^3.0.0-rc.12
     "@yarnpkg/cli": ^3.0.0-rc.12
     "@yarnpkg/core": ^3.0.0-rc.12
     "@yarnpkg/plugin-npm": ^2.5.0-rc.12
+    command-exists: ^1.2.9
     luxon: ^2.0.1
     prettier: ^2.3.2
     typescript: ^4.3.5

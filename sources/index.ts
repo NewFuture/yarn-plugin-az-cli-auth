@@ -1,5 +1,6 @@
 import { spawn } from "child_process";
 import { SettingsType, Configuration } from "@yarnpkg/core";
+import * as commandExists from "command-exists";
 import type { Ident, Plugin, Hooks } from "@yarnpkg/core";
 import type { Hooks as NpmHooks } from "@yarnpkg/plugin-npm";
 
@@ -22,7 +23,7 @@ function run(cmd) {
             if (code === 0) {
                 resolve(result);
             } else {
-                reject(new Error(`code: ${result}`));
+                reject(new Error(`code: ${code}, ${result}`));
             }
         });
     });
@@ -71,6 +72,21 @@ const plugin: Plugin<Hooks & NpmHooks> = {
         },
     } as any,
     hooks: {
+        registerPackageExtensions() {
+            if (process.env.SYSTEM_ACCESSTOKEN) {
+                return Promise.resolve();
+            }
+            // This checks to see if the user is logged in before installs even start
+            return commandExists("az").then(
+                () => {},
+                (error) => {
+                    showInstallMessage();
+                    return Promise.reject(
+                        new Error("Azure CLI is required, Make sure the az command is part of your path"),
+                    );
+                },
+            );
+        },
         getNpmAuthenticationHeader(
             currentHeader: string | undefined,
             registry: string,
@@ -111,16 +127,8 @@ const plugin: Plugin<Hooks & NpmHooks> = {
                     });
                 console.log("Refresh Azure DevOps Access Token");
                 return getAccessToken().catch((error) => {
-                    if (error === 127) {
-                        // Not found https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html
-                        showInstallMessage();
-                        return Promise.reject(
-                            new Error("Azure CLI is required, Make sure the az command is part of your path"),
-                        );
-                    } else {
-                        console.warn(`Can not get access token for Azure DevOps (${error}).\nTry to login.`);
-                        return run("az login").then(getAccessToken);
-                    }
+                    console.warn(`Can not get access token for Azure DevOps (${error}).\nTry to login.`);
+                    return run("az login").then(getAccessToken);
                 });
             }
             return Promise.resolve(null);
