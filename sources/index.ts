@@ -50,6 +50,24 @@ function showInstallMessage() {
     console.log("\n(How to install the Azure CLI Documents https://docs.microsoft.com/cli/azure/install-azure-cli)");
 }
 
+interface TokenType {
+    accessToken: string;
+    expiresOn: string;
+}
+let _getAccessTokenPromise: Promise<TokenType>;
+function getAccessToken() {
+    if (_getAccessTokenPromise) {
+        return _getAccessTokenPromise;
+    }
+    console.log("Refresh Azure DevOps Access Token");
+    return (_getAccessTokenPromise = run(`az account get-access-token --resource \"${azureDevOpsId}\"`)
+        .catch((error) => {
+            console.warn(`Can not get access token for Azure DevOps (${error}).\nTry to login.`);
+            return run("az login").then(() => run(`az account get-access-token --resource \"${azureDevOpsId}\"`));
+        })
+        .then((result: string) => JSON.parse(result) as { accessToken: string; expiresOn: string }));
+}
+
 const plugin: Plugin<Hooks & NpmHooks> = {
     configuration: {
         azCliTokenCache: {
@@ -114,21 +132,15 @@ const plugin: Plugin<Hooks & NpmHooks> = {
                 if (+expiresOn - Date.now() > 1000) {
                     return Promise.resolve(`Bearer ${azCliTokenCache[registry].token}`);
                 }
-                const getAccessToken = () =>
-                    run(`az account get-access-token --resource \"${azureDevOpsId}\"`).then((result: string) => {
-                        const parsed = JSON.parse(result) as { accessToken: string; expiresOn: string };
-                        azCliTokenCache[registry] = {
-                            expiresOn: new Date(parsed.expiresOn).toISOString(),
-                            token: parsed.accessToken,
-                        };
-                        return Configuration.updateHomeConfiguration({
-                            azCliTokenCache,
-                        }).then(() => `Bearer ${azCliTokenCache[registry].token}`);
-                    });
-                console.log("Refresh Azure DevOps Access Token");
-                return getAccessToken().catch((error) => {
-                    console.warn(`Can not get access token for Azure DevOps (${error}).\nTry to login.`);
-                    return run("az login").then(getAccessToken);
+
+                return getAccessToken().then((token) => {
+                    azCliTokenCache[registry] = {
+                        expiresOn: new Date(token.expiresOn).toISOString(),
+                        token: token.accessToken,
+                    };
+                    return Configuration.updateHomeConfiguration({
+                        azCliTokenCache,
+                    }).then(() => `Bearer ${token.accessToken}`);
                 });
             }
             return Promise.resolve(null);
