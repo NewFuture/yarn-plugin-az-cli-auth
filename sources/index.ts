@@ -1,6 +1,6 @@
 import { spawn } from "child_process";
 import { SettingsType, Configuration } from "@yarnpkg/core";
-import * as commandExists from "command-exists";
+import commandExists = require("command-exists");
 import type { Ident, Plugin, Hooks } from "@yarnpkg/core";
 import type { Hooks as NpmHooks } from "@yarnpkg/plugin-npm";
 
@@ -96,7 +96,7 @@ const plugin: Plugin<Hooks & NpmHooks> = {
             }
             // This checks to see if the user is logged in before installs even start
             return commandExists("az").then(
-                () => {},
+                () => { },
                 (error) => {
                     showInstallMessage();
                     return Promise.reject(
@@ -122,11 +122,11 @@ const plugin: Plugin<Hooks & NpmHooks> = {
                 }
                 const azCliTokenCache = configuration.get("azCliTokenCache") as {
                     [registry: string]:
-                        | {
-                              expiresOn: string;
-                              token: string;
-                          }
-                        | undefined;
+                    | {
+                        expiresOn: string;
+                        token: string;
+                    }
+                    | undefined;
                 };
                 const expiresOn = new Date(azCliTokenCache[registry]?.expiresOn);
                 if (+expiresOn - Date.now() > 1000) {
