@@ -68,11 +68,20 @@ function getAccessToken() {
         .then((result: string) => JSON.parse(result) as { accessToken: string; expiresOn: string }));
 }
 
+function mapToObj(map: Map<any, any>) {
+    const obj = {};
+    map.forEach(function (v, k) {
+        obj[k] = v instanceof Map ? mapToObj(v) : v;
+    });
+    return obj;
+}
+
 const plugin: Plugin<Hooks & NpmHooks> = {
     configuration: {
         azCliTokenCache: {
             description: `A cache of tokens fetched via azure cli`,
             type: SettingsType.MAP,
+            default: new Map(),
             valueDefinition: {
                 description: ``,
                 type: SettingsType.SHAPE,
@@ -120,27 +129,25 @@ const plugin: Plugin<Hooks & NpmHooks> = {
                 if (process.env.SYSTEM_ACCESSTOKEN) {
                     return Promise.resolve(`Bearer ${process.env.SYSTEM_ACCESSTOKEN}`);
                 }
-                const azCliTokenCache = configuration.get("azCliTokenCache") as {
-                    [registry: string]:
-                    | {
-                        expiresOn: string;
-                        token: string;
-                    }
-                    | undefined;
-                };
-                const expiresOn = new Date(azCliTokenCache[registry]?.expiresOn);
-                if (+expiresOn - Date.now() > 1000) {
-                    return Promise.resolve(`Bearer ${azCliTokenCache[registry].token}`);
-                }
+                const azCliTokenCache = configuration.get("azCliTokenCache") as Map<string, Map<string, string>>;
 
-                return getAccessToken().then((token) => {
-                    azCliTokenCache[registry] = {
-                        expiresOn: new Date(token.expiresOn).toISOString(),
-                        token: token.accessToken,
-                    };
+                const expiresOn = new Date(azCliTokenCache.get(registry)?.get("expiresOn"));
+                if (+expiresOn - Date.now() > 1000) {
+                    return Promise.resolve(`Bearer ${azCliTokenCache.get(registry).get("token")}`);
+                }
+                return getAccessToken().then((tokenInfo) => {
+                    const expiresOn = new Date(tokenInfo.expiresOn).toISOString();
+                    const token = tokenInfo.accessToken;
+                    azCliTokenCache.set(
+                        registry,
+                        new Map([
+                            ["expiresOn", expiresOn],
+                            ["token", token],
+                        ]),
+                    );
                     return Configuration.updateHomeConfiguration({
-                        azCliTokenCache,
-                    }).then(() => `Bearer ${token.accessToken}`);
+                        azCliTokenCache: mapToObj(azCliTokenCache),
+                    }).then(() => `Bearer ${token}`);
                 });
             }
             return Promise.resolve(null);
