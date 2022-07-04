@@ -103,6 +103,12 @@ const plugin: Plugin<Hooks & NpmHooks> = {
             if (process.env.SYSTEM_ACCESSTOKEN) {
                 return Promise.resolve();
             }
+            const command = process.argv[2] ?? "";
+            const BypassCcommand = ['bin', 'cache', 'config', 'constraints', 'dedupe', 'exec', 'explain', 'info', 'link', 'node', 'pack', 'patch', 'remove', 'run', 'set', 'unlink', 'version', 'why'];
+            // Bypass the login check if not doing things related to downloading packages
+            if (BypassCcommand.indexOf(command) >= 0) {
+                return Promise.resolve();
+            }
             // This checks to see if the user is logged in before installs even start
             return commandExists("az").then(
                 () => { },
