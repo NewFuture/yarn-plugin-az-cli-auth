@@ -23,6 +23,8 @@ yarn plugin import https://github.com/NewFuture/yarn-plugin-az-cli-auth/releases
 Then you will need to setup your .yarnrc.yml file to connect with azure devops
 
 Example:
+
+## apply for scopes
 ```yaml
 npmRegistries:
   //pkgs.dev.azure.com/<organization>/_packaging/<azurefeed>/npm/registry:
@@ -33,4 +35,10 @@ npmRegistries:
 npmScopes:
   <org>:
     npmRegistryServer: https://pkgs.dev.azure.com/<organization>/_packaging/<azurefeed>/npm/registry
+```
+
+## apply for all
+```yaml
+npmAlwaysAuth: true
+npmRegistryServer: https://pkgs.dev.azure.com/<organization>/_packaging/<azurefeed>/npm/registry
 ```
